@@ -1,7 +1,7 @@
 from services.auth_service import authenticate
 from services.adjustment_service import send_adjustments
 from db.database import SessionLocal, engine, Base
-from models.employee import Employee
+from models.employee import RPAProposal
 
 def main():
     try:
@@ -10,7 +10,7 @@ def main():
         
         db_session = SessionLocal()
         session_api = authenticate()
-        send_adjustments(session_api, db_session, Employee)
+        send_adjustments(session_api, db_session, RPAProposal)
 
     except Exception as e:
         print("❌ General error:", e)

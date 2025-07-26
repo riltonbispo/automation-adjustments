@@ -1,13 +1,13 @@
-from sqlalchemy import Column, Integer, String, Date, DateTime
+from sqlalchemy import Column, Integer, BigInteger, String, Date, DateTime
 from db.database import Base
 
-class Employee(Base):
-    __tablename__ = "employees"
+class RPAProposal(Base):
+    __tablename__ = "RPAProposal"
 
     id = Column(Integer, primary_key=True, index=True, nullable=False)
-    data = Column(Date, nullable=False)
-    employeeId = Column(Integer, nullable=False)
+    employeeId = Column(BigInteger, nullable=False)
+    date = Column(Date, nullable=False)
+    eventId = Column(BigInteger)
     integrationDateTime = Column(DateTime)
-    statusCode = Column(String)
-    content = Column(String)
-    eventId = Column(Integer)
+    status = Column(String(25))
+    content = Column(String(1000))
