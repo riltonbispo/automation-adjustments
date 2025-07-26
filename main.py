@@ -1,14 +1,21 @@
 from services.auth_service import authenticate
 from services.adjustment_service import send_adjustments
-import pandas as pd
+from db.database import SessionLocal, engine, Base
+from models.employee import Employee
 
 def main():
     try:
-        df = pd.read_excel("datas.xlsx")
-        session = authenticate()
-        send_adjustments(session, df)
+        print("🛠️ Verificando/criando tabelas...")
+        Base.metadata.create_all(bind=engine)
+        
+        db_session = SessionLocal()
+        session_api = authenticate()
+        send_adjustments(session_api, db_session, Employee)
+
     except Exception as e:
         print("❌ General error:", e)
+    finally:
+        db_session.close()
 
 if __name__ == "__main__":
     main()
