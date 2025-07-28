@@ -34,13 +34,11 @@ def process_employee(session_api, db_session, emp):
             time_cards = work_days[0].get("time_cards")
             if not time_cards:
                 print(f"Sem marcações de ponto (time_cards) para o colaborador {employee_id} no dia {current_date.strftime('%d/%m/%Y')}. Pulando para o próximo dia.")
-                current_date += timedelta(days=1)
                 continue
 
             missing_time = work_days[0].get("missing_time", 0.0)
             if missing_time == 0.0:
                 print(f"Nenhuma hora faltante para o colaborador {employee_id} no dia {current_date.strftime('%d/%m/%Y')}. Pulando para o próximo dia.")
-                current_date += timedelta(days=1)
                 continue
 
             payload = {
