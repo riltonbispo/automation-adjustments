@@ -6,7 +6,7 @@ class RPAProposal(Base):
 
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     employeeId = Column(BigInteger, nullable=False)
-    date = Column(Date, nullable=False)
+    date = Column(Date)
     eventId = Column(BigInteger)
     integrationDateTime = Column(DateTime)
     status = Column(String(25))

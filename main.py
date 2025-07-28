@@ -1,5 +1,5 @@
 from services.auth_service import authenticate
-from services.adjustment_service import send_adjustments
+from services.partial_leave import partial_leave
 from db.database import SessionLocal, engine, Base
 from models.employee import RPAProposal
 
@@ -10,7 +10,7 @@ def main():
         
         db_session = SessionLocal()
         session_api = authenticate()
-        send_adjustments(session_api, db_session, RPAProposal)
+        partial_leave(session_api, db_session, RPAProposal)
 
     except Exception as e:
         print("❌ General error:", e)
