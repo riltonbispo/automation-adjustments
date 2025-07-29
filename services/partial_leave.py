@@ -3,6 +3,8 @@ from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 from tqdm import tqdm
 from models.employee import RPAProposal
+from models.person import Person
+
 
 load_dotenv()
 API_BASE_URL = os.getenv("API_BASE_URL")
@@ -16,7 +18,7 @@ def process_employee(session_api, db_session, emp):
         try:
             formatted_date = current_date.strftime("%d-%m-%Y")
             iso_date = current_date.strftime("%Y-%m-%d")
-            employee_id = str(emp.employeeId)
+            employee_id = str(emp.personID)
 
             current_date_info = session_api.get(
                 f"https://atma-api.pontomais.com.br/api/time_card_control/{employee_id}/work_days",
@@ -89,8 +91,8 @@ def process_employee(session_api, db_session, emp):
         finally:
             current_date += timedelta(days=1)
 
-def partial_leave(session_api, db_session, Employee):
-    employees = db_session.query(Employee).filter(Employee.integrationDateTime.is_(None)).all()
+def partial_leave(session_api, db_session, Person):
+    employees = db_session.query(Person.filter(Person.eventId.is_(860486))).all()
     for emp in tqdm(employees):
         try:
             process_employee(session_api, db_session, emp)

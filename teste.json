@@ -1,0 +1,188 @@
+{
+    "employee": {
+        "id": 1457885,
+        "name": "COLABORADOR TESTE BASE SUPORTE",
+        "picture": {
+            "url": "https://api.pontomais.com.br//images/default/employees/pictures/default_avatar.png",
+            "medium_url": "https://api.pontomais.com.br//images/default/employees/pictures/medium_avatar.png",
+            "small_url": "https://api.pontomais.com.br//images/default/employees/pictures/small_avatar.png"
+        },
+        "job_title": {
+            "id": 589991,
+            "name": "ANL TI JR"
+        },
+        "shift": {
+            "id": 1120959,
+            "name": "14:00 - 20:20 - Refeição 20min. e 2 Pausas 10min. FLEX- 100",
+            "advanced": false,
+            "flexible": true,
+            "without_holidays": true,
+            "nr17": true,
+            "work_schedule": false,
+            "advanced_preference": null
+        },
+        "team": {
+            "id": 708901,
+            "name": "Teste",
+            "leader_ids": [
+                1614644
+            ],
+            "cover_picture": {
+                "url": "https://api.pontomais.com.br//images/default/teams/cover_pictures/default.jpg",
+                "small_url": "https://api.pontomais.com.br//images/default/teams/cover_pictures/small.jpg"
+            }
+        },
+        "client_preference_data": {
+            "use_qrcode_pin": false,
+            "geolocation_enabled": true,
+            "offline_time_cards_enabled": false,
+            "extra_time_justifications_enabled": false,
+            "overtime_approval_enabled": false,
+            "messages_enabled": false,
+            "time_card_allowance": 5,
+            "electronic_acceptance_method": 1,
+            "time_card_allowance_interval_enabled": true,
+            "solicitation_attachments_enabled": false,
+            "solicitation_attachments_edit": false,
+            "dsr_enabled": false,
+            "time_card_local_time_enabled": false,
+            "can_team_leader_edit_own_work_day": false,
+            "team_leader_can_edit_own_subordinates_only": false,
+            "apply_strong_password_policy": true,
+            "can_register_app_time_cards": false,
+            "auto_time_card_enable": false,
+            "auto_time_break_enable": false,
+            "odd_point_consolidation_enabled": false,
+            "timezone": 2,
+            "flexible_interval": {
+                "separate_totals": false
+            },
+            "flexible": {
+                "interval_extra_time_enabled": false
+            },
+            "mte_allowance": {
+                "cumulative": false,
+                "compensatory": false
+            },
+            "compensatory_time_off": {
+                "enabled": true,
+                "allowance": true,
+                "rest_time_enabled": false,
+                "start_date": "01/08/2023",
+                "multiply_factor_50_percent": 1.0,
+                "multiply_factor_100_percent": 1.0,
+                "expiration": 6,
+                "middle_phases_extra_time": false,
+                "ignore_missing_days_from_time_balance": true,
+                "ignore_missing_time_from_time_balance": true,
+                "limit": "9999:99",
+                "negative_limit": "-00:01",
+                "distribute_extra_hours_enabled": false,
+                "distribute_missing_hours_enabled": false,
+                "cumulative_time_balance": false,
+                "factors": {}
+            },
+            "custom_extra_time": {
+                "enabled": false,
+                "first_phase_percent": 50,
+                "second_phase_percent": 100
+            },
+            "extra_time_factors": {
+                "enabled": false,
+                "calculate_without_percentage": false
+            },
+            "overnight": {
+                "enabled": false,
+                "interval_enabled": false,
+                "extended": false,
+                "reduced_night_overtime": false,
+                "start_time": "22:00",
+                "end_time": "05:00"
+            },
+            "global_notifications": {
+                "missing_interval_time": false,
+                "time_registration_receipt_email": false,
+                "before_time_card_time": "",
+                "missing_rest_time": "",
+                "work_day_extra_time": "",
+                "work_day_summary_dispatch_time": "08:00"
+            },
+            "dsr": {
+                "enabled": true,
+                "enable_shift_intermittent": true,
+                "miss_holiday": true,
+                "disabled_discount_on_sunday_holiday": false,
+                "missing_time_exceeded": false,
+                "missing_time_limit": "00:30",
+                "enabled_discount_range": false,
+                "discount_ranges": [],
+                "enabled_calculate_in_hours": false,
+                "enable_extra_time": false,
+                "enabled_credit_work_in_dsr": false,
+                "enabled_credit_work_in_holiday": false
+            }
+        }
+    },
+    "work_days": [
+        {
+            "id": 407967533,
+            "created_at": 1753574516,
+            "updated_at": 1753730524,
+            "date": "2025-07-27",
+            "status": {
+                "id": 1,
+                "name": "Correto"
+            },
+            "process_status": {
+                "id": 1,
+                "name": "Processada"
+            },
+            "extra_time": 0.0,
+            "missing_time": 14760.0,
+            "time_balance": 1268760.0,
+            "time_cards": [],
+            "custom_totals": false,
+            "exemption": null,
+            "closed": false,
+            "last_solicitation_proposal_status": null,
+            "time_break_proposal": null,
+            "allow_exemption_allowance": true,
+            "proposals_count": 4,
+            "shift_time": 21600.0,
+            "shift": {
+                "id": 1120959,
+                "code": "A001262",
+                "name": "14:00 - 20:20 - Refeição 20min. e 2 Pausas 10min. FLEX- 100",
+                "flexible": true,
+                "flexible_interval": true,
+                "nr17": true,
+                "auto_interval": false,
+                "work_schedule": false
+            },
+            "shift_day": {
+                "id": 8075465,
+                "periods": [
+                    {
+                        "enter_time": "14:00",
+                        "leave_time": "17:30"
+                    },
+                    {
+                        "enter_time": "17:50",
+                        "leave_time": "20:20"
+                    }
+                ]
+            },
+            "time_balance_entries": [],
+            "time_balance_settled": false,
+            "time_balance_enabled": true,
+            "day_off": null,
+            "time_break_edited": false
+        }
+    ],
+    "meta": {
+        "now": 1753730574,
+        "ip": "177.39.183.5",
+        "obfuscated": false
+    },
+    "obfuscator": "Masked::Hashs::TimeCardController"
+}
