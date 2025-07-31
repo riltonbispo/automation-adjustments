@@ -2,8 +2,7 @@ import os
 from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 from tqdm import tqdm
-from models.employee import RPAProposal
-from models.person import Person
+from models.models import RPAProposalV2
 
 
 load_dotenv()
@@ -70,7 +69,7 @@ def process_employee(session_api, db_session, emp):
             emp.content = str(response.json())
             db_session.commit()
 
-            new_proposal = RPAProposal(
+            new_proposal = RPAProposalV2(
                 date=current_date,
                 employeeId=employee_id,
                 integrationDateTime=datetime.now(),

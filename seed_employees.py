@@ -1,5 +1,5 @@
 from db.database import SessionLocal, Base, engine
-from models.employee import RPAProposal
+from models.models import RPAProposalV2
 from datetime import datetime
 
 Base.metadata.create_all(bind=engine)
@@ -13,7 +13,7 @@ employee_ids = [
 record_date = datetime.strptime("25/07/2025", "%d/%m/%Y").date()
 
 for emp_id in employee_ids:
-    new_proposal = RPAProposal(
+    new_proposal = RPAProposalV2(
         date=None,
         employeeId=emp_id,
         integrationDateTime=None,

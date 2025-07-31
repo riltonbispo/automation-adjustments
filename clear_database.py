@@ -1,11 +1,11 @@
 from db.database import SessionLocal, Base, engine
-from models.employee import RPAProposal
+from models.models import RPAProposalV2
 
 session = SessionLocal()
 
 print("⚠️ Limpando registros...")
 
-session.query(RPAProposal).delete()
+session.query(RPAProposalV2).delete()
 
 session.commit()
 session.close()

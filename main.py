@@ -1,8 +1,7 @@
 from services.auth_service import authenticate
 from services.partial_leave import partial_leave
 from db.database import SessionLocal, engine, Base
-from models.employee import RPAProposal
-from models.person import Person
+from models.models import Employee
 
 def main():
     try:
@@ -12,7 +11,7 @@ def main():
         db_session = SessionLocal()
 
 
-        new_person = Person(
+        new_person = Employee(
             personID=1457885,
             eventId=860486
         )
@@ -21,7 +20,7 @@ def main():
         db_session.commit()
 
         session_api = authenticate()
-        partial_leave(session_api, db_session, Person)
+        partial_leave(session_api, db_session, Employee)
 
     except Exception as e:
         print("❌ General error:", e)
