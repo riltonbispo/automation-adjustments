@@ -2,24 +2,25 @@ import os
 from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 from tqdm import tqdm
-from models.models import RPAProposalV2
-
+from models.models import RPAProposalV2, Employee
+from sqlalchemy.orm import Session
 
 load_dotenv()
 API_BASE_URL = os.getenv("API_BASE_URL")
 
-def process_employee(session_api, db_session, emp):
+
+def process_employee(session_api, db_session: Session, emp: Employee, event_id: int):
     today = date.today()
     start_date = today - timedelta(days=30)
-
     current_date = start_date
+
     while current_date <= today:
         try:
             formatted_date = current_date.strftime("%d-%m-%Y")
             iso_date = current_date.strftime("%Y-%m-%d")
-            employee_id = str(emp.personID)
+            employee_id = str(emp.id_ponto_mais)
 
-            current_date_info = session_api.get(
+            response_api = session_api.get(
                 f"https://atma-api.pontomais.com.br/api/time_card_control/{employee_id}/work_days",
                 params={
                     "end_date": iso_date,
@@ -28,18 +29,19 @@ def process_employee(session_api, db_session, emp):
                     "employee_id": employee_id
                 }
             )
-            data = current_date_info.json()
-
+            data = response_api.json()
             work_days = data.get("work_days", [])
 
             time_cards = work_days[0].get("time_cards")
             if not time_cards:
-                print(f"Sem marcações de ponto (time_cards) para o colaborador {employee_id} no dia {current_date.strftime('%d/%m/%Y')}. Pulando para o próximo dia.")
+                print(f"Sem marcações de ponto para {employee_id} em {formatted_date}. Pulando.")
+                current_date += timedelta(days=1)
                 continue
 
             missing_time = work_days[0].get("missing_time", 0.0)
             if missing_time == 0.0:
-                print(f"Nenhuma hora faltante para o colaborador {employee_id} no dia {current_date.strftime('%d/%m/%Y')}. Pulando para o próximo dia.")
+                print(f"Sem horas faltantes para {employee_id} em {formatted_date}. Pulando.")
+                current_date += timedelta(days=1)
                 continue
 
             payload = {
@@ -48,7 +50,7 @@ def process_employee(session_api, db_session, emp):
                     "times_attributes": [],
                     "proposal_type": 2,
                     "employee_id": employee_id,
-                    "status_id": emp.eventId
+                    "status_id": event_id
                 },
                 "_appVersion": "0.10.32",
                 "_device": {
@@ -63,37 +65,35 @@ def process_employee(session_api, db_session, emp):
 
             response = session_api.post(f"{API_BASE_URL}/api/time_cards/proposals/adjust", json=payload)
 
-            emp.date = current_date
-            emp.integrationDateTime = datetime.now()
-            emp.status = str(response.status_code)
-            emp.content = str(response.json())
-            db_session.commit()
-
             new_proposal = RPAProposalV2(
                 date=current_date,
-                employeeId=employee_id,
-                integrationDateTime=datetime.now(),
+                employee_id=emp.id_ponto_mais,
+                integration_datetime=datetime.now(),
                 status=str(response.status_code),
-                content=str(response.json()),
-                eventId=860486
+                event_id=event_id
             )
             db_session.add(new_proposal)
             db_session.commit()
 
             hours = int(missing_time) // 60
             minutes = int(missing_time) % 60
-            print(f"📤 Ajuste enviado para o colaborador {employee_id} no dia {current_date.strftime('%d/%m/%Y')} com {hours}h{minutes:02d}min faltantes.")
-
+            print(f"📤 Ajuste enviado para {employee_id} em {formatted_date} com {hours}h{minutes:02d}min faltantes.")
 
         except Exception as e:
-            print(f"❌ Erro ao processar o dia {current_date} para o colaborador {emp.employeeId}: {e}")
+            print(f"❌ Erro no dia {current_date} para o colaborador {emp.id_ponto_mais}: {e}")
         finally:
             current_date += timedelta(days=1)
 
-def partial_leave(session_api, db_session, Person):
-    employees = db_session.query(Person.filter(Person.eventId.is_(860486))).all()
+
+def partial_leave(session_api, db_session: Session, event_id: int):
+    employees = (
+        db_session.query(Employee)
+        .join(Employee.events)
+        .filter_by(event_id=event_id)
+        .all()
+    )
     for emp in tqdm(employees):
         try:
-            process_employee(session_api, db_session, emp)
+            process_employee(session_api, db_session, emp, event_id)
         except Exception as e:
-            print(f"❌ Erro ao processar o colaborador com ID {emp.employeeId}: {e}")
+            print(f"❌ Erro ao processar colaborador {emp.id_ponto_mais}: {e}")

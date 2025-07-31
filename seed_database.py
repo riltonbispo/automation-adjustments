@@ -1,41 +1,27 @@
-from datetime import date, datetime
-from db.database import SessionLocal, engine, Base
+from db.database import Base, engine
+from sqlalchemy.orm import Session
 from models.models import Employee, Event
-
-Base.metadata.create_all(bind=engine)
+from datetime import datetime
 
 def seed():
-    session = SessionLocal()
+    Base.metadata.create_all(engine)
 
-    try:
-        employees = [
-            {"id": 1, "id_ponto_mais": 1001},
-            {"id": 2, "id_ponto_mais": 1002},
-            {"id": 3, "id_ponto_mais": 1003},
-        ]
+    session = Session(bind=engine)
 
-        for emp in employees:
-            new_emp = Employee(id=emp["id"], id_ponto_mais=emp["id_ponto_mais"])
-            session.add(new_emp)
+    employees_data = [
+        {"id_ponto_mais": 1457885},
+    ]
+    employees = [Employee(**data) for data in employees_data]
 
-        events = [
-            {"id": 1, "event_id": 5001, "date": date(2025, 7, 31)},
-            {"id": 2, "event_id": 5002, "date": date(2025, 8, 1)},
-            {"id": 3, "event_id": 5003, "date": date(2025, 8, 2)},
-        ]
+    event = Event(event_id=860486, date=datetime.now())
 
-        for event_data in events:
-            event = Event(id=event_data["id"], event_id=event_data["event_id"], date=event_data["date"])
-            session.add(event)
+    event.employees.extend(employees)
 
-        session.commit()
-        print("Seed realizado com sucesso!")
+    session.add(event)
+    session.add_all(employees)
 
-    except Exception as e:
-        session.rollback()
-        print("Erro ao realizar seed:", e)
-    finally:
-        session.close()
+    session.commit()
+    session.close()
 
 if __name__ == "__main__":
     seed()

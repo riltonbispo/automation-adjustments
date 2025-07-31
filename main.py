@@ -9,18 +9,8 @@ def main():
         Base.metadata.create_all(bind=engine)
         
         db_session = SessionLocal()
-
-
-        new_person = Employee(
-            personID=1457885,
-            eventId=860486
-        )
-
-        db_session.add(new_person)
-        db_session.commit()
-
         session_api = authenticate()
-        partial_leave(session_api, db_session, Employee)
+        partial_leave(session_api, db_session, event_id=860486)
 
     except Exception as e:
         print("❌ General error:", e)
