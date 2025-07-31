@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 load_dotenv()
 API_BASE_URL = os.getenv("API_BASE_URL")
 
-
 def process_employee(session_api, db_session: Session, emp: Employee, event_id: int):
     today = date.today()
     start_date = today - timedelta(days=30)
@@ -18,7 +17,7 @@ def process_employee(session_api, db_session: Session, emp: Employee, event_id: 
         try:
             formatted_date = current_date.strftime("%d-%m-%Y")
             iso_date = current_date.strftime("%Y-%m-%d")
-            employee_id = str(emp.id_ponto_mais)
+            employee_id = emp.id_ponto_mais
 
             response_api = session_api.get(
                 f"https://atma-api.pontomais.com.br/api/time_card_control/{employee_id}/work_days",
@@ -26,22 +25,29 @@ def process_employee(session_api, db_session: Session, emp: Employee, event_id: 
                     "end_date": iso_date,
                     "start_date": iso_date,
                     "with_employee": "true",
-                    "employee_id": employee_id
+                    "employee_id": str(employee_id)
                 }
             )
             data = response_api.json()
             work_days = data.get("work_days", [])
 
-            time_cards = work_days[0].get("time_cards")
+            time_cards = work_days[0].get("time_cards") if work_days else None
             if not time_cards:
                 print(f"Sem marcações de ponto para {employee_id} em {formatted_date}. Pulando.")
-                current_date += timedelta(days=1)
                 continue
 
-            missing_time = work_days[0].get("missing_time", 0.0)
+            missing_time = work_days[0].get("missing_time", 0.0) if work_days else 0.0
             if missing_time == 0.0:
                 print(f"Sem horas faltantes para {employee_id} em {formatted_date}. Pulando.")
-                current_date += timedelta(days=1)
+                continue
+
+            existing_proposal = (
+                db_session.query(RPAProposalV2)
+                .filter_by(employee_id=employee_id, event_id=event_id, date=current_date)
+                .first()
+            )
+            if existing_proposal:
+                print(f"Registro já existe para {employee_id} no evento {event_id} na data {formatted_date}. Pulando.")
                 continue
 
             payload = {
@@ -49,7 +55,7 @@ def process_employee(session_api, db_session: Session, emp: Employee, event_id: 
                     "date": iso_date,
                     "times_attributes": [],
                     "proposal_type": 2,
-                    "employee_id": employee_id,
+                    "employee_id": str(employee_id),
                     "status_id": event_id
                 },
                 "_appVersion": "0.10.32",
@@ -67,7 +73,7 @@ def process_employee(session_api, db_session: Session, emp: Employee, event_id: 
 
             new_proposal = RPAProposalV2(
                 date=current_date,
-                employee_id=emp.id_ponto_mais,
+                employee_id=employee_id,
                 integration_datetime=datetime.now(),
                 status=str(response.status_code),
                 event_id=event_id
