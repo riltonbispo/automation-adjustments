@@ -5,8 +5,8 @@ from db.database import Base
 class Employee(Base):
     __tablename__ = "Employee"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    id = Column(Integer)
+    id_ponto_mais = Column(Integer, primary_key=True)
 
     proposals = relationship('RPAProposalV2', back_populates='employee')
 
@@ -14,8 +14,8 @@ class Employee(Base):
 class Event(Base):
     __tablename__ = 'Event'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    id = Column(Integer)
+    event_id = Column(Integer, primary_key=True)
     date = Column(Date)
 
     proposals = relationship('RPAProposalV2', back_populates='event')
@@ -25,8 +25,8 @@ class RPAProposalV2(Base):
     __tablename__ = 'RPAProposalV2'
 
     id = Column(Integer, primary_key=True)
-    employee_id = Column(Integer, ForeignKey('Employee.id'))
-    event_id = Column(Integer, ForeignKey('Event.id'))
+    employee_id = Column(Integer, ForeignKey('Employee.id_ponto_mais'))
+    event_id = Column(Integer, ForeignKey('Event.event_id'))
     date = Column(Date)
     status = Column(String)
     integration_datetime = Column(DateTime)
