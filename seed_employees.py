@@ -7,11 +7,30 @@ Base.metadata.create_all(bind=engine)
 session = SessionLocal()
 
 employee_ids = [
-    1457885
+    1561952,
+    1601682,
+    1601698,
+    1603834,
+    1603876,
+    1607962,
+    1607963,
+    1607971,
+    1579281,
+    1589763,
+    1563321,
+    1603853,
+    1603857,
+    1603859,
+    1601973,
+    1601276,
+    1579281,
+    1589763,
+    1563321,
+    1603853
 ]
 
-start_date = datetime.strptime("25/06/2025", "%d/%m/%Y").date()
-end_date = datetime.strptime("25/07/2025", "%d/%m/%Y").date()
+start_date = datetime.strptime("18/07/2025", "%d/%m/%Y").date()
+end_date = datetime.strptime("18/07/2025", "%d/%m/%Y").date()
 
 current_date = start_date
 
