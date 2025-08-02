@@ -1,4 +1,4 @@
-from db.database import SessionLocal, Base, engine
+from db.database import SessionLocal
 from models.employee import RPAProposal
 
 session = SessionLocal()
