@@ -42,6 +42,6 @@ def partial_leave(session_api, db_session, Employee):
             db_session.commit()
 
         except Exception as e:
-            print(f"\n❌ Erro na linha {idx + 1}: {e}")
+            print(f"\n Erro na linha {idx + 1}: {e}")
 
-    print("\n✅ Ajustes enviados com sucesso.")
+    print("\n Ajustes enviados com sucesso.")

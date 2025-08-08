@@ -39,5 +39,5 @@ def authenticate():
         "uuid": "f1eb4783-8c9f-43f6-9fc7-39b90373146f"
     })
 
-    print("✅ Successfully authenticated.")
+    print("Successfully authenticated.")
     return session

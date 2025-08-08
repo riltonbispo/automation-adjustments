@@ -5,7 +5,7 @@ from models.employee import RPAProposal
 
 def main():
     try:
-        print("🛠️ Verificando/criando tabelas...")
+        print("Verificando/criando tabelas...")
         Base.metadata.create_all(bind=engine)
         
         db_session = SessionLocal()
@@ -13,7 +13,7 @@ def main():
         partial_leave(session_api, db_session, RPAProposal)
 
     except Exception as e:
-        print("❌ General error:", e)
+        print("General error:", e)
     finally:
         db_session.close()
 

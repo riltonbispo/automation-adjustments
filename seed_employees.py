@@ -23,4 +23,4 @@ for item in data_para_seed:
 session.commit()
 session.close()
 
-print("✅ Registros inseridos com sucesso")
+print("Registros inseridos com sucesso")
