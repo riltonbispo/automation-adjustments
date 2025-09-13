@@ -10,7 +10,7 @@ API_BASE_URL = os.getenv("API_BASE_URL")
 
 def process_employee(session_api, db_session: Session, emp: Employee, event_id: int):
     today = date.today()
-    start_date = today - timedelta(days=30)
+    start_date = today - timedelta(days=7)
     current_date = start_date
 
     while current_date <= today:
@@ -37,6 +37,11 @@ def process_employee(session_api, db_session: Session, emp: Employee, event_id: 
                 continue
 
             missing_time = work_days[0].get("missing_time", 0.0) if work_days else 0.0
+
+            extra_time = work_days[0].get("extra_time", 0.0) if work_days else 0.0
+            if extra_time >= 7200.0:
+                print(f"⚠️ ATENÇÃO === HORA EXTRA PARA {employee_id} EM {formatted_date} ⚠️! ")
+
             if missing_time == 0.0:
                 print(f"Sem horas faltantes para {employee_id} em {formatted_date}. Pulando.")
                 continue
